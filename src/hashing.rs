@@ -13,6 +13,22 @@ pub fn hash(passwd: &str) -> (String, argon2id13::HashedPassword) {
     (texthash, hash)
 }
 
+pub fn verify_slice(hash: &[u8], passwd: &str) -> bool {
+    sodiumoxide::init().unwrap();
+    match argon2id13::HashedPassword::from_slice(&hash) {
+        Some(hp) => argon2id13::pwhash_verify(&hp, passwd.as_bytes()),
+        _ => false,
+    }
+}
+
+pub fn verify(hash: [u8; 128], passwd: &str) -> bool {
+    sodiumoxide::init().unwrap();
+    match argon2id13::HashedPassword::from_slice(&hash) {
+        Some(hp) => argon2id13::pwhash_verify(&hp, passwd.as_bytes()),
+        _ => false,
+    }
+}
+
 pub fn hash_timed() {
     let passwd = "Hashy McHasherton";
 
@@ -27,6 +43,18 @@ pub fn hash_timed() {
     .unwrap();
     println!(
         "INTERACTIVE hashing without init() took {} milliseconds.",
+        now.elapsed().as_millis()
+    );
+
+    let now = Instant::now();
+    let _ = argon2id13::pwhash(
+        passwd.as_bytes(),
+        argon2id13::OPSLIMIT_INTERACTIVE,
+        argon2id13::MEMLIMIT_MODERATE,
+    )
+    .unwrap();
+    println!(
+        "OPSLIMIT_INTERACTIVE/MEMLIMIT_MODERATE hashing without init() took {} milliseconds.",
         now.elapsed().as_millis()
     );
 
@@ -77,6 +105,18 @@ pub fn hash_timed() {
     let now = Instant::now();
     let _ = argon2id13::pwhash(
         passwd.as_bytes(),
+        argon2id13::OPSLIMIT_INTERACTIVE,
+        argon2id13::MEMLIMIT_MODERATE,
+    )
+    .unwrap();
+    println!(
+        "OPSLIMIT_INTERACTIVE/MEMLIMIT_MODERATE hashing without init() took {} milliseconds.",
+        now.elapsed().as_millis()
+    );
+
+    let now = Instant::now();
+    let _ = argon2id13::pwhash(
+        passwd.as_bytes(),
         argon2id13::OPSLIMIT_MODERATE,
         argon2id13::MEMLIMIT_MODERATE,
     )
@@ -97,20 +137,4 @@ pub fn hash_timed() {
         "SENSITIVE hashing after init() took {} milliseconds.",
         now.elapsed().as_millis()
     );
-}
-
-pub fn verify_slice(hash: &[u8], passwd: &str) -> bool {
-    sodiumoxide::init().unwrap();
-    match argon2id13::HashedPassword::from_slice(&hash) {
-        Some(hp) => argon2id13::pwhash_verify(&hp, passwd.as_bytes()),
-        _ => false,
-    }
-}
-
-pub fn verify(hash: [u8; 128], passwd: &str) -> bool {
-    sodiumoxide::init().unwrap();
-    match argon2id13::HashedPassword::from_slice(&hash) {
-        Some(hp) => argon2id13::pwhash_verify(&hp, passwd.as_bytes()),
-        _ => false,
-    }
 }

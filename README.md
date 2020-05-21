@@ -34,11 +34,11 @@ docker run -d --name pgsql12 \
         -p 5432:5432 \
         postgres:12-alpine
 
-## to start or stop the db in the future run
+## to start the db in the future
 
 docker start pgsql12
 
-# or
+# to stop the db in the future
 
 docker stop pgsql12
 ```
