@@ -1,0 +1,15 @@
+[package]
+name = "rust-sodiumoxide-examples"
+version = "0.1.0"
+authors = ["Luke Arntz <luke@blue42.net>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+anyhow = "1.0"
+sqlx = { version = "0.3", default-features = false, features = [ "runtime-tokio", "macros", 
+    "postgres"] }
+tokio = { version = "0.2", features = ["macros"] }
+serde = { version = "1.0", features = ["derive"] }
+sodiumoxide = "0.2.5"
