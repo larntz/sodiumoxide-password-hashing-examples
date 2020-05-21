@@ -6,7 +6,7 @@ use std::env;
 // user data from db (includes id)
 #[derive(Debug, Serialize, FromRow)]
 pub struct UserDBRecordWithId {
-    pub id: u32,
+    pub id: i32,
     pub user_name: String,
     pub password_hash_char: String,
     pub password_hash_bin: HashedPassword,
@@ -56,11 +56,10 @@ pub async fn get_user(user_name: String) -> Result<UserDBRecordWithId, sqlx::Err
     .await?;
 
     Ok(UserDBRecordWithId {
-        id: user_select.id as u32,
+        id: user_select.id,
         user_name: user_select.user_name,
-        password_hash_bin: HashedPassword::from_slice(&user_select.password_hash_bin.unwrap())
-            .unwrap(),
-        password_hash_char: user_select.password_hash_char.unwrap(),
+        password_hash_bin: HashedPassword::from_slice(&user_select.password_hash_bin).unwrap(),
+        password_hash_char: user_select.password_hash_char,
         email_address: user_select.email_address,
     })
 }
