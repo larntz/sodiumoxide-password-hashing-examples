@@ -14,7 +14,7 @@ You can read the post here: [https://blue42.net](https://blue42.net/code/rust/ex
 To run the database examples you'll need a postgres database and to set an
 environment variable with the connection string.
 
-### Example ENV
+### Example DATABASE_URL
 
 ``` shell
 export DATABASE_URL=postgres://postgres:database_password@localhost/database_name
