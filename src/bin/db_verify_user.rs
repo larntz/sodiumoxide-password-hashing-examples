@@ -7,7 +7,8 @@ async fn main() -> anyhow::Result<()> {
     match args.get(2) {
         Some(passwd) => {
             //
-            // hash the password and add the user to the db
+            // hash the given password and add compare to
+            // the hash stored in the database
             //
             let user = database::get_user(String::from(args.get(1).unwrap())).await?;
             let mut padded = [0u8; 128];
