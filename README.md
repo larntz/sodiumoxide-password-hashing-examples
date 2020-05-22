@@ -17,7 +17,7 @@ environment variable with the connection string.
 ### Example DATABASE_URL
 
 ``` shell
-export DATABASE_URL=postgres://postgres:database_password@localhost/database_name
+export DATABASE_URL=postgres://postgres:postgres_user_password@localhost/database_name
 ```
 
 ### Run a local postgres DB via docker
