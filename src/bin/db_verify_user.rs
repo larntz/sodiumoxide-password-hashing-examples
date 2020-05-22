@@ -12,13 +12,8 @@ async fn main() -> anyhow::Result<()> {
             //
             let user = database::get_user(String::from(args.get(1).unwrap())).await?;
             let mut padded = [0u8; 128];
-            user.password_hash_char
-                .as_bytes()
-                .iter()
-                .enumerate()
-                .for_each(|(i, val)| {
-                    padded[i] = val.clone();
-                });
+            let hash = user.password_hash_char.as_bytes();
+            padded[..hash.len()].copy_from_slice(hash);
             println!(
                 "verify with password_hash_char: {:?}",
                 hashing::verify(padded, passwd)

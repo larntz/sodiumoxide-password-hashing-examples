@@ -27,13 +27,8 @@ fn main() {
     // create a padded array size 128
     //
     let mut padded = [0u8; 128];
-    bob_is_cool_hash
-        .as_bytes()
-        .iter()
-        .enumerate()
-        .for_each(|(i, val)| {
-            padded[i] = val.clone();
-        });
+    let hash = bob_is_cool_hash.as_bytes();
+    padded[..hash.len()].copy_from_slice(hash);
     println!(
         "verifying with padded hash (len = {}): {:?}",
         padded.len(),
