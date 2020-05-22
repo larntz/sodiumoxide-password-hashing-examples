@@ -27,20 +27,16 @@ async fn main() -> anyhow::Result<()> {
                     //
                     let user = database::get_user(String::from(args.get(1).unwrap())).await?;
                     let mut padded = [0u8; 128];
-                    user.password_hash_char
-                        .as_bytes()
-                        .iter()
-                        .enumerate()
-                        .for_each(|(i, val)| {
-                            padded[i] = val.clone();
-                        });
+                    padded[..user.password_hash_char.len()].copy_from_slice(user.password_hash_char.as_bytes());
                     println!(
                         "verify with password_hash_char: {:?}",
                         hashing::verify(padded, passwd)
                     );
+                    let mut binarray = [0u8;128];
+                    binarray.copy_from_slice(&user.password_hash_bin[..]);
                     println!(
                         "verify with password_hash_bin: {:?}",
-                        hashing::verify(user.password_hash_bin.0, passwd)
+                        hashing::verify(binarray, passwd)
                     );
                 }
                 _ => println!("failed to add user {}", user_name),

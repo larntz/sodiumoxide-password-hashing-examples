@@ -18,9 +18,11 @@ async fn main() -> anyhow::Result<()> {
                 "verify with password_hash_char: {:?}",
                 hashing::verify(padded, passwd)
             );
+            let mut binarray = [0u8;128];
+            binarray.copy_from_slice(&user.password_hash_bin[..]);
             println!(
                 "verify with password_hash_bin: {:?}",
-                hashing::verify(user.password_hash_bin.0, passwd)
+                hashing::verify(binarray, passwd)
             );
         }
         _ => {

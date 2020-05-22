@@ -1,7 +1,7 @@
 use sodiumoxide::crypto::pwhash::argon2id13;
 use std::time::Instant;
 
-pub fn hash(passwd: &str) -> (String, argon2id13::HashedPassword) {
+pub fn hash(passwd: &str) -> (String, Vec<u8>) {
     sodiumoxide::init().unwrap();
     let hash = argon2id13::pwhash(
         passwd.as_bytes(),
@@ -10,7 +10,7 @@ pub fn hash(passwd: &str) -> (String, argon2id13::HashedPassword) {
     )
     .unwrap();
     let texthash = std::str::from_utf8(&hash.0).unwrap().to_string();
-    (texthash, hash)
+    (texthash, hash.0.to_vec())
 }
 
 pub fn verify_slice(hash: &[u8], passwd: &str) -> bool {
