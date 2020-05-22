@@ -1,5 +1,5 @@
-DROP TABLE IF EXISTS sodium.users;
-CREATE TABLE IF NOT EXISTS sodium.users
+DROP TABLE IF EXISTS users;
+CREATE TABLE IF NOT EXISTS users
 (
     id uuid NOT NULL DEFAULT uuid_generate_v1mc(),
     user_name varchar(128) UNIQUE NOT NULL,
