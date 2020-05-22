@@ -27,7 +27,7 @@ pub async fn add_user(user: UserDBRecord) -> Result<u64, sqlx::Error> {
             .await?;
 
     let result = sqlx::query!(
-        r#"INSERT INTO sodium.users(user_name,password_hash_bin,password_hash_char,email_address)
+        r#"INSERT INTO users(user_name,password_hash_bin,password_hash_char,email_address)
             VALUES ($1,$2,$3,$4)
             ON CONFLICT(user_name) DO UPDATE SET password_hash_bin = $2
         "#,
@@ -51,7 +51,7 @@ pub async fn get_user(user_name: String) -> Result<UserDBRecordWithId, sqlx::Err
         UserDBRecordWithId,
         r#"
         SELECT id,user_name,password_hash_bin,password_hash_char,email_address 
-        FROM sodium.users WHERE user_name = $1"#,
+        FROM users WHERE user_name = $1"#,
         user_name
     )
     .fetch_one(&mut conn)
